@@ -1,7 +1,6 @@
 using System.Threading;
 using System.Threading.Tasks;
 using UnityEditor;
-using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.UIElements;
 using static Synaptafin.Editor.SelectionTracker.Constants;
