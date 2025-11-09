@@ -57,14 +57,13 @@ namespace Synaptafin.Editor.SelectionTracker {
       }
     }
 
-
     public static void ScanAllComponentsInScene(Scene scene) {
+      SceneComponentsService service = EntryServicePersistence.instance.GetService<SceneComponentsService>();
+      service.Entries.Clear();
       if (!scene.IsValid() || !scene.isLoaded) {
         Debug.LogWarning($"Scene {scene.name} is not valid or not loaded.");
         return;
       }
-
-      Debug.Log($"Scanning components in scene: {scene.name}");
 
       HashSet<Type> uniqueComponentTypes = new();
       GameObject[] rootObjects = scene.GetRootGameObjects();
@@ -72,7 +71,8 @@ namespace Synaptafin.Editor.SelectionTracker {
       foreach (GameObject rootObj in rootObjects) {
         ScanGameObjectAndChildren(rootObj, uniqueComponentTypes);
       }
-      EntryServicePersistence.instance.Save();
+
+      service.Refresh();
     }
 
     private static void ScanGameObjectAndChildren(GameObject obj, HashSet<Type> uniqueTypes) {
@@ -80,6 +80,11 @@ namespace Synaptafin.Editor.SelectionTracker {
       Component[] components = obj.GetComponents<Component>();
       foreach (Component component in components) {
         if (component != null) {
+
+          if (component is Transform) {
+            continue; // Skip Transform components 
+          }
+
           if (uniqueTypes.Add(component.GetType())) {
             EntryServicePersistence.instance.RecordComponent(EntryFactory.Create(component));
           }

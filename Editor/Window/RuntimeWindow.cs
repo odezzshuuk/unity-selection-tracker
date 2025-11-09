@@ -6,7 +6,7 @@ using UnityEngine.UIElements;
 namespace Synaptafin.Editor.SelectionTracker {
   // Can't EditorWindow.GetWindow<BaseWindow<T>>()
   // Create derived classes for each window type
-  public class HistoryWindow : BaseWindow<HistoryService>, IHasCustomMenu {
+  public class HistoryWindow : BaseEntryWindow<HistoryService>, IHasCustomMenu {
 
     public void AddItemsToMenu(GenericMenu menu) {
       menu.AddItem(
@@ -54,14 +54,55 @@ namespace Synaptafin.Editor.SelectionTracker {
     }
   }
 
-  public class SceneComponentsWindow : BaseWindow<SceneComponentsService>, IHasCustomMenu {
+  public class MostVisitedWindow : BaseEntryWindow<MostVisitedService> { }
+  public class FavoritesWindow : BaseEntryWindow<FavoritesService> {
 
     public new void OnEnable() {
       base.OnEnable();
-
-      Scene activeScene = SceneManager.GetActiveScene();
-      Utils.ScanAllComponentsInScene(activeScene);
+      _entryService.OnUpdated.AddListener(OnFavoritesUpdated);
     }
+
+    public new void CreateGUI() {
+      base.CreateGUI();
+      _entryService.StoreOriginalFavorites();
+      _windowRoot.Q<VisualElement>("EditConfirm").style.display = DisplayStyle.Flex;
+
+      Button _applyChangesButton = _windowRoot.Q<Button>("ApplyChanges");
+      Button _discardChangesButton = _windowRoot.Q<Button>("DiscardChanges");
+
+      _applyChangesButton.RegisterCallback<ClickEvent>((evt) => SaveChanges());
+      _discardChangesButton.RegisterCallback<ClickEvent>((evt) => DiscardChanges());
+
+      EnableEditConfirmButtons(false);
+    }
+
+    public void OnDestroy() {
+      SaveChanges();
+      _entryService.OnUpdated.RemoveListener(OnFavoritesUpdated);
+    }
+
+    public override void SaveChanges() {
+      _entryService.ApplyChanges();
+      EnableEditConfirmButtons(false);
+      base.SaveChanges();
+    }
+
+    public override void DiscardChanges() {
+      _entryService.DiscardChanges();
+      EnableEditConfirmButtons(false);
+      base.DiscardChanges();
+    }
+
+    private void OnFavoritesUpdated() {
+      EnableEditConfirmButtons(true);
+    }
+
+    private void EnableEditConfirmButtons(bool enable) {
+      _windowRoot.Q<Button>("ApplyChanges").SetEnabled(enable);
+      _windowRoot.Q<Button>("DiscardChanges").SetEnabled(enable);
+    }
+  }
+  public class SceneComponentsWindow : BaseEntryWindow<SceneComponentsService>, IHasCustomMenu {
 
     public void AddItemsToMenu(GenericMenu menu) {
       menu.AddItem(
@@ -79,8 +120,10 @@ namespace Synaptafin.Editor.SelectionTracker {
     }
 
     private void Refresh() {
-
+      Utils.ScanAllComponentsInScene(SceneManager.GetActiveScene());
     }
+  }
 
+  public class ComponentListSupportWindow : BaseEntryWindow<ComponentListSupportService> {
   }
 }

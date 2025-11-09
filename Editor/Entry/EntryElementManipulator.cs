@@ -1,7 +1,6 @@
 using System.Threading;
 using System.Threading.Tasks;
 using UnityEditor;
-using UnityEngine;
 using UnityEngine.UIElements;
 using static Synaptafin.Editor.SelectionTracker.Constants;
 
@@ -106,7 +105,7 @@ namespace Synaptafin.Editor.SelectionTracker {
       }
 
       if (evt.button == 0 && evt.clickCount == 2) {
-        _entryElement.GetEntryService().ResetCurrentSelection();
+        _entryElement.GetEntryService().CurrentSelectionIndex = -1;
         Entry.Open();
       }
     }

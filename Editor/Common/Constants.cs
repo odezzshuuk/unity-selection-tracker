@@ -51,5 +51,7 @@ namespace Synaptafin.Editor.SelectionTracker {
     public const string OPEN_ASSET_ICON_NAME = "FolderOpened Icon";
     public const string CLEAR_SEARCH_TOOLBAR_ICON_NAME = "d_clear";
     public const string DEFAULT_ASSET_ICON_NAME = "DefaultAsset Icon";
+    public const string D_VERTICAL_LAYOUT_GROUP_ICON_NAME = "d_VerticalLayoutGroup Icon";
+    public const string TRANSFORM_ICON_NAME = "Transform Icon";
   }
 }

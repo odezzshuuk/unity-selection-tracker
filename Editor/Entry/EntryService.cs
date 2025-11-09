@@ -8,42 +8,33 @@ using UnityEngine.Events;
 namespace Synaptafin.Editor.SelectionTracker {
 
   public interface IEntryService {
-    List<Entry> GetEntries { get; }
+    List<Entry> Entries { get; }
     UnityEvent OnUpdated { get; }
     int CurrentSelectionIndex { get; set; }
-    int SizeLimit { get; }
     void RecordEntry(Entry selection);
     void RemoveEntry(Entry selection);
-    void RemoveAll() {
-      OnUpdated?.Invoke();
-    }
-    void RemoveAll(Predicate<Entry> predicate);
-    void ResetCurrentSelection();
   }
 
   [Serializable]
   public class HistoryService : IEntryService {
 
-    private static readonly Lazy<HistoryService> s_instance = new(static () => new());
-    public static HistoryService Instance => s_instance.Value;
-
     [SerializeReference]
     private List<Entry> _entryList = new();
-    public List<Entry> GetEntries => _entryList.AsEnumerable().Reverse().ToList();
+    public List<Entry> Entries => _entryList.AsEnumerable().Reverse().ToList();
 
     [SerializeField]
     private UnityEvent _onUpdated = new();
     public UnityEvent OnUpdated => _onUpdated;
 
-    public int SizeLimit { get; } = 100;
     private int _currentSelectionIndex = -1;
-
-    private HistoryService() { }
+    private readonly int _sizeLimit = 100;
 
     public int CurrentSelectionIndex {
       get => _currentSelectionIndex;
       set => _currentSelectionIndex = _entryList.Count - value - 1;
     }
+
+    public HistoryService() { }
 
     public void RecordEntry(Entry entry) {
       if (entry == null) {
@@ -64,7 +55,7 @@ namespace Synaptafin.Editor.SelectionTracker {
       // if exist then update
       _entryList.Add(entry);
 
-      while (_entryList.Count > SizeLimit) {
+      while (_entryList.Count > _sizeLimit) {
         _entryList.RemoveAt(0);
       }
 
@@ -121,13 +112,10 @@ namespace Synaptafin.Editor.SelectionTracker {
   [Serializable]
   public class MostVisitedService : IEntryService {
 
-    private static readonly Lazy<MostVisitedService> s_instance = new(static () => new());
-    public static MostVisitedService Instance => s_instance.Value;
-
     [SerializeReference]
     private List<Entry> _slidingWindow = new();
 
-    public List<Entry> GetEntries => _slidingWindow
+    public List<Entry> Entries => _slidingWindow
       .GroupBy(static entry => entry)
       .OrderByDescending(static group => group.Count())
       .Select(static group => group.Key)
@@ -135,12 +123,10 @@ namespace Synaptafin.Editor.SelectionTracker {
 
     public UnityEvent OnUpdated { get; } = new();
 
-    private readonly int _mostRecentLimit = 200;
-    public int SizeLimit { get; } = 100;
-
+    private readonly int _sizeLimit = 200;
     public int CurrentSelectionIndex { get; set; }
 
-    private MostVisitedService() { }
+    public MostVisitedService() { }
 
     public void RecordEntry(Entry entry) {
       if (entry == null) {
@@ -149,7 +135,7 @@ namespace Synaptafin.Editor.SelectionTracker {
 
       _slidingWindow.Add(entry);
 
-      if (_slidingWindow.Count > _mostRecentLimit) {
+      if (_slidingWindow.Count > _sizeLimit) {
         _slidingWindow.RemoveAt(0);
       }
 
@@ -169,9 +155,6 @@ namespace Synaptafin.Editor.SelectionTracker {
   [Serializable]
   public class FavoritesService : IEntryService {
 
-    private static readonly Lazy<FavoritesService> s_instance = new(static () => new());
-    public static FavoritesService Instance => s_instance.Value;
-
     private enum SizeOverFlowChoice {
       Ignore,
       RemoveOldest,
@@ -181,12 +164,11 @@ namespace Synaptafin.Editor.SelectionTracker {
     private List<Entry> _entries = new();
     private List<Entry> _entries0;
 
-    public List<Entry> GetEntries => _entries.AsEnumerable().Reverse().ToList();
+    public List<Entry> Entries => _entries.AsEnumerable().Reverse().ToList();
     public UnityEvent OnUpdated { get; } = new();
     public int CurrentSelectionIndex { get; set; }
-    public int SizeLimit { get; } = 200;
 
-    private FavoritesService() { }
+    public FavoritesService() { }
 
     public void RecordEntry(Entry entry, bool isFavorite) {
       if (entry == null) {
@@ -257,18 +239,13 @@ namespace Synaptafin.Editor.SelectionTracker {
   [Serializable]
   public class SceneComponentsService : IEntryService {
 
-    private static readonly Lazy<SceneComponentsService> s_instance = new(static () => new());
-    public static SceneComponentsService Instance => s_instance.Value;
-
     [SerializeReference]
     private List<Entry> _entries = new();
-    public List<Entry> GetEntries => _entries;
+    public List<Entry> Entries => _entries;
 
     public UnityEvent OnUpdated { get; } = new();
 
     public int CurrentSelectionIndex { get; set; }
-
-    public int SizeLimit { get; } = 300;
 
     public void RecordEntry(Entry selection) {
       if (selection == null) {
@@ -280,13 +257,31 @@ namespace Synaptafin.Editor.SelectionTracker {
       }
 
       _entries.Add(selection);
-      OnUpdated?.Invoke();
     }
 
     public void RemoveEntry(Entry selection) { }
 
-    public void RemoveAll(Predicate<Entry> predicate) { }
-
     public void ResetCurrentSelection() { }
+
+    public void Refresh() {
+      OnUpdated?.Invoke();
+    }
+  }
+
+  // Temporary service for component list in main window
+  public class ComponentListSupportService : IEntryService {
+
+    public List<Entry> Entries { get; } = new();
+    public UnityEvent OnUpdated { get; } = new();
+
+    public int CurrentSelectionIndex { get; set; }
+
+    public void RecordEntry(Entry selection) {
+      Entries.Add(selection);
+    }
+
+    public void RemoveEntry(Entry selection) {
+      throw new Exception("Should not remove entry manually");
+    }
   }
 }

@@ -2,6 +2,7 @@
     <Style src="project://database/Assets/Scripts/Editor/SelectionTracker/GlobalStyle.uss?fileID=7433441132597879392&amp;guid=bd1e770e29c054d02bf114a0a207818a&amp;type=3#GlobalStyle" />
     <editor:ToolbarSearchField name="SearchField" class="window__search-toolbar" />
     <engine:ScrollView name="EntryContainer" class="window__scroll-view" />
+
     <engine:VisualElement name="EditConfirm" class="window__edited-box">
         <engine:Button name="ApplyChanges" text="Apply" />
         <engine:Button name="DiscardChanges" text="Discard" />

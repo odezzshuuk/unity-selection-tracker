@@ -12,7 +12,7 @@ namespace Synaptafin.Editor.SelectionTracker {
       GUIContent titleContent = new("History") {
         text = "History",
         tooltip = "History Window",
-        image = EditorGUIUtility.IconContent(UnityBuiltInIcons.DEFAULT_ASSET_ICON_NAME).image
+        image = EditorGUIUtility.IconContent(UnityBuiltInIcons.D_VERTICAL_LAYOUT_GROUP_ICON_NAME).image
       };
       wnd.titleContent = titleContent;
     }
@@ -35,7 +35,7 @@ namespace Synaptafin.Editor.SelectionTracker {
       GUIContent titleContent = new("Scene Components") {
         text = "Scene Components",
         tooltip = "Scene Components Window",
-        image = EditorGUIUtility.IconContent(UnityBuiltInIcons.DEFAULT_ASSET_ICON_NAME).image
+        image = EditorGUIUtility.IconContent(UnityBuiltInIcons.TRANSFORM_ICON_NAME).image
       };
       wnd.titleContent = titleContent;
     }

@@ -10,8 +10,7 @@ namespace Synaptafin.Editor.SelectionTracker {
 
     public override string DisplayName => Ref.GetType().Name;
 
-    public ComponentEntry(Component component, GlobalObjectId id) : base(component, id) {
-    }
+    public ComponentEntry(Component component, GlobalObjectId id) : base(component, id) { }
 
     public override bool Equals(Entry other) {
 
@@ -54,11 +53,17 @@ namespace Synaptafin.Editor.SelectionTracker {
         return;
       }
 
-      Debug.Log($"Pinging {objectsWithComponent.Count} GameObjects with component type: {componentType.Name}");
-
+      ComponentListSupportService componentListService = EntryServicePersistence.instance.GetService<ComponentListSupportService>();
+      componentListService.Entries.Clear();
       foreach (GameObject obj in objectsWithComponent) {
-        EditorGUIUtility.PingObject(obj);
+        componentListService.RecordEntry(EntryFactory.Create(obj));
       }
+
+      componentListService.OnUpdated.Invoke();
+
+      ComponentListSupportWindow wnd = EditorWindow.GetWindow<ComponentListSupportWindow>();
+      GUIContent titleContent = new($"Components: {componentType.Name}({objectsWithComponent.Count})");
+      wnd.titleContent = titleContent;
     }
 
     public override void Open() {
