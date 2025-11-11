@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using UnityEngine.SceneManagement;
@@ -8,9 +7,12 @@ namespace Synaptafin.Editor.SelectionTracker {
 
   public class ComponentEntry : Entry {
 
+    private readonly ComponentListSupportService _componentListService;
     public override string DisplayName => Ref.GetType().Name;
 
-    public ComponentEntry(Component component, GlobalObjectId id) : base(component, id) { }
+    public ComponentEntry(Component component, GlobalObjectId id) : base(component, id) {
+      _componentListService = EntryServicePersistence.instance.GetService<ComponentListSupportService>();
+    }
 
     public override bool Equals(Entry other) {
 
@@ -22,6 +24,7 @@ namespace Synaptafin.Editor.SelectionTracker {
     }
 
     public override void Ping() {
+      _componentListService.Entries.Clear();
       if (Ref == null) {
         Debug.LogWarning("Cannot ping: Ref is null");
         return;
@@ -41,11 +44,11 @@ namespace Synaptafin.Editor.SelectionTracker {
         return;
       }
 
-      List<GameObject> objectsWithComponent = new();
       GameObject[] rootObjects = activeScene.GetRootGameObjects();
 
+      // Current Loaded Scene
       foreach (GameObject rootObj in rootObjects) {
-        FindGameObjectsWithComponent(rootObj, componentType, objectsWithComponent);
+        FindGameObjectsWithComponent(rootObj, componentType);
       }
 
       // DontDestroyOnLoad Scene
@@ -63,16 +66,15 @@ namespace Synaptafin.Editor.SelectionTracker {
         }
       }
 
-      ComponentListSupportService componentListService = EntryServicePersistence.instance.GetService<ComponentListSupportService>();
-      componentListService.Entries.Clear();
-      foreach (GameObject obj in objectsWithComponent) {
-        componentListService.RecordEntry(EntryFactory.Create(obj));
+      if (_componentListService.Entries.Count == 0) {
+        Debug.Log($"No GameObjects found with component type: {componentType.Name}");
+        return;
       }
 
-      componentListService.OnUpdated.Invoke();
+      _componentListService.OnUpdated.Invoke();
 
       ComponentListSupportWindow wnd = EditorWindow.GetWindow<ComponentListSupportWindow>();
-      GUIContent titleContent = new($"Components: {componentType.Name}({objectsWithComponent.Count})");
+      GUIContent titleContent = new($"Components: {componentType.Name}({_componentListService.Entries.Count})");
       wnd.titleContent = titleContent;
     }
 
@@ -86,16 +88,16 @@ namespace Synaptafin.Editor.SelectionTracker {
       }
     }
 
-    private void FindGameObjectsWithComponent(GameObject obj, Type componentType, List<GameObject> results) {
+    private void FindGameObjectsWithComponent(GameObject obj, Type componentType) {
       // Check if this GameObject has the component
       if (obj.GetComponent(componentType) != null) {
-        results.Add(obj);
+        _componentListService?.RecordEntry(EntryFactory.Create(obj));
       }
 
       // Recursively check children
       Transform transform = obj.transform;
       for (int i = 0; i < transform.childCount; i++) {
-        FindGameObjectsWithComponent(transform.GetChild(i).gameObject, componentType, results);
+        FindGameObjectsWithComponent(transform.GetChild(i).gameObject, componentType);
       }
     }
   }

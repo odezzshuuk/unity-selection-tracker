@@ -16,11 +16,14 @@ namespace Synaptafin.Editor.SelectionTracker {
 
     static Utils() {
       Selection.selectionChanged += SelectionChangedCallback;
+
+      SceneManager.sceneLoaded += SceneLoadedCallback;
       EditorSceneManager.sceneOpened += SceneOpenedCallback;
+
       PrefabStage.prefabStageOpened += PrefabStageOpenedCallback;
       PrefabStage.prefabStageClosing += static (prefabStage) => {
         Scene activeScene = SceneManager.GetActiveScene();
-        ScanAllComponentsInScene(activeScene);
+        ScanAllComponentsInScene(activeScene).GetAwaiter().GetResult();
       };
     }
 
@@ -62,7 +65,10 @@ namespace Synaptafin.Editor.SelectionTracker {
       }
     }
 
-    public static void ScanAllComponentsInScene(Scene scene) {
+    public static async Awaitable ScanAllComponentsInScene(Scene scene) {
+
+      // Seems scene DontDestroyOnLoad load a little later than loaded scene
+      await Awaitable.EndOfFrameAsync();
 
       SceneComponentsService service = EntryServicePersistence.instance.GetService<SceneComponentsService>();
       service.Entries.Clear();
@@ -72,8 +78,9 @@ namespace Synaptafin.Editor.SelectionTracker {
       }
 
       HashSet<Type> uniqueComponentTypes = new();
-      GameObject[] rootObjects = scene.GetRootGameObjects();
 
+      // GameObjects in current scene
+      GameObject[] rootObjects = scene.GetRootGameObjects();
       foreach (GameObject rootObj in rootObjects) {
         ScanGameObjectAndChildren(rootObj, uniqueComponentTypes);
       }
@@ -103,7 +110,7 @@ namespace Synaptafin.Editor.SelectionTracker {
         if (component != null) {
 
           if (component is Transform) {
-            continue; // Skip Transform components 
+            continue; // Skip Transform components
           }
 
           if (uniqueTypes.Add(component.GetType())) {
@@ -119,12 +126,16 @@ namespace Synaptafin.Editor.SelectionTracker {
       }
     }
 
-    private static void SceneOpenedCallback(Scene scene, OpenSceneMode mode) {
-      ScanAllComponentsInScene(scene);
+    private static async void SceneOpenedCallback(Scene scene, OpenSceneMode mode) {
+      await ScanAllComponentsInScene(scene);
     }
 
-    private static void PrefabStageOpenedCallback(PrefabStage prefabStage) {
-      ScanAllComponentsInScene(prefabStage.scene);
+    private static async void SceneLoadedCallback(Scene scene, LoadSceneMode mode) {
+      await ScanAllComponentsInScene(scene);
+    }
+
+    private static async void PrefabStageOpenedCallback(PrefabStage prefabStage) {
+      await ScanAllComponentsInScene(prefabStage.scene);
     }
   }
 }

@@ -246,16 +246,16 @@ namespace Synaptafin.Editor.SelectionTracker {
     public UnityEvent OnUpdated { get; } = new();
     public int CurrentSelectionIndex { get; set; }
 
-    public void RecordEntry(Entry selection) {
-      if (selection == null) {
+    public void RecordEntry(Entry entry) {
+      if (entry == null) {
         return;
       }
 
-      if (_entries.Contains(selection)) {
+      if (_entries.Contains(entry)) {
         return;
       }
 
-      _entries.Add(selection);
+      _entries.Add(entry);
     }
 
     public void RemoveEntry(Entry selection) { }
@@ -275,8 +275,10 @@ namespace Synaptafin.Editor.SelectionTracker {
 
     public int CurrentSelectionIndex { get; set; }
 
-    public void RecordEntry(Entry selection) {
-      Entries.Add(selection);
+    public void RecordEntry(Entry entry) {
+      if (entry != null) {
+        Entries.Add(entry);
+      }
     }
 
     public void RemoveEntry(Entry selection) {
