@@ -57,6 +57,9 @@ namespace Synaptafin.Editor.SelectionTracker {
     }
 
     protected void ReloadView() {
+      if (_entryContainer == null) {
+        return;
+      }
       foreach (EntryElement elt in _entryContainer.Children().OfType<EntryElement>()) {
         bool show = elt.Entry != null && IsMatch(elt) && PassFilter(elt.Entry);
         elt.style.display = show ? DisplayStyle.Flex : DisplayStyle.None;
@@ -66,6 +69,10 @@ namespace Synaptafin.Editor.SelectionTracker {
     protected virtual void AddContextMenu() { }
 
     private void SetupEntries() {
+      // _entryContainer can be null if CreateGUI hasn't been called yet
+      if (_entryContainer == null) {
+        return;
+      }
       List<Entry> entries = _entryService.Entries;
       List<EntryElement> entryElements = _entryContainer.Children().OfType<EntryElement>()?.ToList();
 
@@ -138,6 +145,5 @@ namespace Synaptafin.Editor.SelectionTracker {
       SetupEntries();
       ReloadView();
     }
-
   }
 }
