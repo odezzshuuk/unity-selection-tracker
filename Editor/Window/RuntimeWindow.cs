@@ -125,13 +125,13 @@ namespace Synaptafin.Editor.SelectionTracker {
       _windowRoot.AddManipulator(contextMenuManipulator);
     }
 
-    private void Refresh() {
+    private async void Refresh() {
       PrefabStage prefabStage = PrefabStageUtility.GetCurrentPrefabStage();
 
       if (prefabStage != null) {
-        Utils.ScanAllComponentsInScene(prefabStage.scene);
+        await Utils.ScanAllComponentsInScene(prefabStage.scene);
       } else {
-        Utils.ScanAllComponentsInScene(SceneManager.GetActiveScene());
+        await Utils.ScanAllComponentsInScene(SceneManager.GetActiveScene());
       }
     }
   }

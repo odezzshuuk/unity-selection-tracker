@@ -14,15 +14,17 @@ namespace Synaptafin.Editor.SelectionTracker {
           return new GameObjectEntry(go, id);
         }
 
-        // identifierType=2 doesn't cover DDOL objects
-        if (go.scene == GetDontDestroyOnLoadScene()) {
-          return new GameObjectEntry(go, id);
-        }
-
         // prefab content is gameobject in prefab edit mode
         PrefabStage prefabStage = PrefabStageUtility.GetCurrentPrefabStage();
         if (prefabStage != null) {
           return new PrefabContentEntry(go, id, prefabStage);
+        }
+
+        if (Application.isPlaying) {
+          // identifierType=2 doesn't cover DDOL objects
+          if (go.scene == GetDontDestroyOnLoadScene()) {
+            return new GameObjectEntry(go, id);
+          }
         }
       }
 

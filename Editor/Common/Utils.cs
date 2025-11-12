@@ -67,8 +67,7 @@ namespace Synaptafin.Editor.SelectionTracker {
 
     public static async Awaitable ScanAllComponentsInScene(Scene scene) {
 
-      // Seems scene DontDestroyOnLoad load a little later than loaded scene
-      await Awaitable.EndOfFrameAsync();
+      await Awaitable.MainThreadAsync();
 
       SceneComponentsService service = EntryServicePersistence.instance.GetService<SceneComponentsService>();
       service.Entries.Clear();
@@ -131,6 +130,8 @@ namespace Synaptafin.Editor.SelectionTracker {
     }
 
     private static async void SceneLoadedCallback(Scene scene, LoadSceneMode mode) {
+      // Seems scene DontDestroyOnLoad load a little later than loaded scene
+      await Awaitable.NextFrameAsync();
       await ScanAllComponentsInScene(scene);
     }
 
