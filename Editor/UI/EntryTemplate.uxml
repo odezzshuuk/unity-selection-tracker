@@ -1,18 +1,14 @@
-<?xml version="1.0" encoding="utf-8"?>
-<engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements"
-    xmlns:editor="UnityEditor.UIElements" xsi:noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd">
-
+<engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/tools/SelectionTracker/Editor/UI/GlobalStyle.uss?fileID=7433441132597879392&amp;guid=bd1e770e29c054d02bf114a0a207818a&amp;type=3#GlobalStyle" />
     <engine:VisualElement name="Root" class="entry__root">
-        <engine:VisualElement class="entry__info" name="Info">
-            <engine:Image class="entry__icon" name="Icon" />
-            <engine:Label class="entry__label" text="default" name="Name"  />
+        <engine:VisualElement name="Info" class="entry__info">
+            <engine:Image name="Icon" class="entry__icon" />
+            <engine:Label text="default" name="Name" class="entry__label" />
         </engine:VisualElement>
         <engine:VisualElement class="entry__interaction">
-            <engine:Image class="entry__icon" name="OpenPrefabIcon" tooltip="Open" />
-            <engine:Image class="entry__icon" name="FavoriteIcon" tooltip="Toggle Favorite" />
-            <engine:Image class="entry__icon" name="PingIcon" tooltip="Locate"/>
+            <engine:Image name="OpenPrefabIcon" tooltip="Open" class="entry__icon" />
+            <engine:Image name="FavoriteIcon" tooltip="Toggle Favorite" class="entry__icon" />
+            <engine:Image name="PingIcon" tooltip="Locate" class="entry__icon" />
         </engine:VisualElement>
-
     </engine:VisualElement>
-
 </engine:UXML>

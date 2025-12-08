@@ -1,5 +1,3 @@
-@import "tailwindcss";
-
 .Convention {
     /* 1. Position & Display */
     /* 1.1 Position: top, right, bottom, left, z-index */
@@ -65,7 +63,6 @@
     /* 4. Typography */
     font-size: 12px;
     -unity-text-align: middle-left;
-    text-align: middle-left;
 
     /* 5. Background */
     background-color: rgba(0, 0, 0, 0.1);
@@ -87,7 +84,7 @@
 .entry__icon {
     /* 2. Box Model */
     width: 16px;
-    min-width: 16px;
+    max-width: 16px;
     max-height: 16px;
 }
 
