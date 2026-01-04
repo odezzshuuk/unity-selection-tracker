@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using Object = UnityEngine.Object;
 
-namespace Synaptafin.Editor.SelectionTracker {
+namespace Odezzshuuk.Editor.SelectionTracker {
 
   [Flags]
   [Serializable]

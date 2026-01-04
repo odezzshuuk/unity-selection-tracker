@@ -4,7 +4,7 @@ using UnityEditor.SceneManagement;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace Synaptafin.Editor.SelectionTracker {
+namespace Odezzshuuk.Editor.SelectionTracker {
 
   /// <summary>
   /// Represents a entry of gameobject in prefab stage

@@ -3,7 +3,7 @@ using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace Synaptafin.Editor.SelectionTracker {
+namespace Odezzshuuk.Editor.SelectionTracker {
   public static class EntryFactory {
     public static Entry Create(Object obj) {
       GlobalObjectId id = GlobalObjectId.GetGlobalObjectIdSlow(obj);

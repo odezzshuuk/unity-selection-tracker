@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using Object = UnityEngine.Object;
 
-namespace Synaptafin.Editor.SelectionTracker {
+namespace Odezzshuuk.Editor.SelectionTracker {
 
   [Serializable]
   public class GameObjectEntry : Entry {

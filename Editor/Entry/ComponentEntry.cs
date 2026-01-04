@@ -3,8 +3,9 @@ using UnityEngine;
 using UnityEditor;
 using UnityEngine.SceneManagement;
 
-namespace Synaptafin.Editor.SelectionTracker {
+namespace Odezzshuuk.Editor.SelectionTracker {
 
+  [Serializable]
   public class ComponentEntry : Entry {
 
     private readonly ComponentListSupportService _componentListService;

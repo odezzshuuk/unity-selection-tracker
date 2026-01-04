@@ -7,14 +7,14 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using Object = UnityEngine.Object;
 
-namespace Synaptafin.Editor.SelectionTracker {
+namespace Odezzshuuk.Editor.SelectionTracker {
 
   [InitializeOnLoad]
-  public static class Utils {
+  public static class Bootstrap {
 
-    private static readonly PreferencePersistence s_preferenceOption = PreferencePersistence.instance;
+    private static readonly PreferencePersistence s_PreferenceOptions = PreferencePersistence.instance;
 
-    static Utils() {
+    static Bootstrap() {
       Selection.selectionChanged += SelectionChangedCallback;
 
       SceneManager.sceneLoaded += SceneLoadedCallback;
@@ -34,7 +34,7 @@ namespace Synaptafin.Editor.SelectionTracker {
 
       bool isGameObject = Selection.activeObject is GameObject;
 
-      if (isGameObject && !s_preferenceOption.GetToggleValue(Constants.RECORD_GAMEOBJECTS_KEY)) {
+      if (isGameObject && !s_PreferenceOptions.GetToggleValue(Constants.RECORD_GAMEOBJECTS_KEY)) {
         return;
       }
 

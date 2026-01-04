@@ -3,7 +3,7 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
-namespace Synaptafin.Editor.SelectionTracker {
+namespace Odezzshuuk.Editor.SelectionTracker {
 
   /// <summary>
   /// Manages persistence and coordination of various entry tracking services in the Selection Tracker system.
@@ -15,24 +15,29 @@ namespace Synaptafin.Editor.SelectionTracker {
   public class EntryServicePersistence : ScriptableSingleton<EntryServicePersistence> {
 
     [SerializeReference]
-    private List<IEntryService> _entryServices = new();
+    private List<IEntryService> _entryServices;
 
     private HistoryService _historyService;
     private MostVisitedService _mostVisitedService;
     private FavoritesService _favoritesService;
     private SceneComponentsService _sceneComponentsService;
-    private ComponentListSupportService _componentListSupportService;
 
     /// <summary>
     /// Called when the ScriptableSingleton is loaded. Registers update listeners for all entry services
     /// to ensure changes are automatically saved to disk.
     /// </summary>
     public void OnEnable() {
+      // initialize services list
+      if (_entryServices == null) {
+        _entryServices = new();
+      } else {
+        _entryServices.RemoveAll(s => s == null);
+      }
+
       _historyService = GetService<HistoryService>();
       _mostVisitedService = GetService<MostVisitedService>();
       _favoritesService = GetService<FavoritesService>();
       _sceneComponentsService = GetService<SceneComponentsService>();
-      _componentListSupportService = GetService<ComponentListSupportService>();
 
       foreach (IEntryService entryService in _entryServices) {
         entryService?.OnUpdated.AddListener(OnServiceUpdate);

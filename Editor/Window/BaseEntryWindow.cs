@@ -4,7 +4,7 @@ using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine.UIElements;
 
-namespace Synaptafin.Editor.SelectionTracker {
+namespace Odezzshuuk.Editor.SelectionTracker {
 
   public class BaseEntryWindow<T> : EditorWindow where T : IEntryService, new() {
 

@@ -3,7 +3,7 @@ using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace Synaptafin.Editor.SelectionTracker {
+namespace Odezzshuuk.Editor.SelectionTracker {
   public static class PreferenceProvider {
 
     private static readonly VisualTreeAsset s_preferenceUxml = UIAssetLocator.Instance.PreferenceTemplate;

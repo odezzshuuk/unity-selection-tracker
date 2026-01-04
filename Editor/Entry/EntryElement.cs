@@ -1,7 +1,7 @@
-using Synaptafin.Editor.SelectionTracker;
+using Odezzshuuk.Editor.SelectionTracker;
 using UnityEditor;
-using static Synaptafin.Editor.SelectionTracker.Constants;
-using static Synaptafin.Editor.SelectionTracker.UnityBuiltInIcons;
+using static Odezzshuuk.Editor.SelectionTracker.Constants;
+using static Odezzshuuk.Editor.SelectionTracker.UnityBuiltInIcons;
 
 namespace UnityEngine.UIElements {
 

@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace Synaptafin.Editor.SelectionTracker {
+namespace Odezzshuuk.Editor.SelectionTracker {
 
   public static class Constants {
     public const string MENU_PATH_PREFIX = "Window/Selection Tracker/";

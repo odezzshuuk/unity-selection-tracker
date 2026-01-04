@@ -3,7 +3,7 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine.UIElements;
 
-namespace Synaptafin.Editor.SelectionTracker {
+namespace Odezzshuuk.Editor.SelectionTracker {
 
   public class UIAssetLocator {
 

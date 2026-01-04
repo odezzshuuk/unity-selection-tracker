@@ -2,9 +2,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using UnityEditor;
 using UnityEngine.UIElements;
-using static Synaptafin.Editor.SelectionTracker.Constants;
+using static Odezzshuuk.Editor.SelectionTracker.Constants;
 
-namespace Synaptafin.Editor.SelectionTracker {
+namespace Odezzshuuk.Editor.SelectionTracker {
 
   public class DragAndLeftClickManipulator : PointerManipulator {
 

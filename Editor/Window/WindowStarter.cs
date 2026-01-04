@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace Synaptafin.Editor.SelectionTracker {
+namespace Odezzshuuk.Editor.SelectionTracker {
 
   public static class WindowStarter {
 

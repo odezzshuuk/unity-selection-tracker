@@ -5,7 +5,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Synaptafin.Editor.SelectionTracker {
+namespace Odezzshuuk.Editor.SelectionTracker {
 
   public interface IEntryService {
     List<Entry> Entries { get; }
@@ -268,9 +268,15 @@ namespace Synaptafin.Editor.SelectionTracker {
   }
 
   // Temporary service for component list in main window
+  [Serializable]
   public class ComponentListSupportService : IEntryService {
 
-    public List<Entry> Entries { get; } = new();
+    // private static readonly Lazy<ComponentListSupportService> s_Instance = new(() => new ComponentListSupportService());
+    // public static ComponentListSupportService Instance => s_Instance.Value;
+    [SerializeReference]
+    private List<Entry> _entries = new();
+    public List<Entry> Entries => _entries;
+
     public UnityEvent OnUpdated { get; } = new();
 
     public int CurrentSelectionIndex { get; set; }

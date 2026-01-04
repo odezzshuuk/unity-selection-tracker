@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
-using static Synaptafin.Editor.SelectionTracker.Constants;
+using static Odezzshuuk.Editor.SelectionTracker.Constants;
 
-namespace Synaptafin.Editor.SelectionTracker {
+namespace Odezzshuuk.Editor.SelectionTracker {
 
   [FilePath("UserSettings/SelectionTracker.Preference.asset", FilePathAttribute.Location.ProjectFolder)]
   public class PreferencePersistence : ScriptableSingleton<PreferencePersistence> {

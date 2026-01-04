@@ -4,7 +4,7 @@ using UnityEngine.SceneManagement;
 using UnityEditor.SceneManagement;
 using UnityEngine.UIElements;
 
-namespace Synaptafin.Editor.SelectionTracker {
+namespace Odezzshuuk.Editor.SelectionTracker {
   // Can't EditorWindow.GetWindow<BaseWindow<T>>()
   // Create derived classes for each window type
   public class HistoryWindow : BaseEntryWindow<HistoryService>, IHasCustomMenu {
@@ -129,9 +129,9 @@ namespace Synaptafin.Editor.SelectionTracker {
       PrefabStage prefabStage = PrefabStageUtility.GetCurrentPrefabStage();
 
       if (prefabStage != null) {
-        await Utils.ScanAllComponentsInScene(prefabStage.scene);
+        await Bootstrap.ScanAllComponentsInScene(prefabStage.scene);
       } else {
-        await Utils.ScanAllComponentsInScene(SceneManager.GetActiveScene());
+        await Bootstrap.ScanAllComponentsInScene(SceneManager.GetActiveScene());
       }
     }
   }

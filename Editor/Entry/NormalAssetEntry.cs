@@ -2,7 +2,7 @@ using System;
 using UnityEditor;
 using Object = UnityEngine.Object;
 
-namespace Synaptafin.Editor.SelectionTracker {
+namespace Odezzshuuk.Editor.SelectionTracker {
 
   [Serializable]
   public class NormalAssetEntry : Entry {

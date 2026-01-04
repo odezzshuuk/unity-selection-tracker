@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UIElements;
 
-namespace Synaptafin.Editor.SelectionTracker {
+namespace Odezzshuuk.Editor.SelectionTracker {
 
   public class UIAssetManager : ScriptableObject {
     public StyleSheet globalStyle;
