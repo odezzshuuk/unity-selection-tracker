@@ -8,12 +8,10 @@ namespace Odezzshuuk.Editor.SelectionTracker {
   [Serializable]
   public class ComponentEntry : Entry {
 
-    private readonly ComponentListSupportService _componentListService;
+    private static readonly ComponentListSupportService s_ComponentListService = EntryServicePersistence.instance.GetService<ComponentListSupportService>();
     public override string DisplayName => Ref.GetType().Name;
 
-    public ComponentEntry(Component component, GlobalObjectId id) : base(component, id) {
-      _componentListService = EntryServicePersistence.instance.GetService<ComponentListSupportService>();
-    }
+    public ComponentEntry(Component component, GlobalObjectId id) : base(component, id) { }
 
     public override bool Equals(Entry other) {
 
@@ -25,7 +23,7 @@ namespace Odezzshuuk.Editor.SelectionTracker {
     }
 
     public override void Ping() {
-      _componentListService.Entries.Clear();
+      s_ComponentListService.Entries.Clear();
       if (Ref == null) {
         Debug.LogWarning("Cannot ping: Ref is null");
         return;
@@ -67,15 +65,15 @@ namespace Odezzshuuk.Editor.SelectionTracker {
         }
       }
 
-      if (_componentListService.Entries.Count == 0) {
+      if (s_ComponentListService.Entries.Count == 0) {
         Debug.Log($"No GameObjects found with component type: {componentType.Name}");
         return;
       }
 
-      _componentListService.OnUpdated.Invoke();
+      s_ComponentListService.OnUpdated.Invoke();
 
       ComponentListSupportWindow wnd = EditorWindow.GetWindow<ComponentListSupportWindow>();
-      GUIContent titleContent = new($"Components: {componentType.Name}({_componentListService.Entries.Count})");
+      GUIContent titleContent = new($"Components: {componentType.Name}({s_ComponentListService.Entries.Count})");
       wnd.titleContent = titleContent;
     }
 
@@ -92,7 +90,7 @@ namespace Odezzshuuk.Editor.SelectionTracker {
     private void FindGameObjectsWithComponent(GameObject obj, Type componentType) {
       // Check if this GameObject has the component
       if (obj.GetComponent(componentType) != null) {
-        _componentListService?.RecordEntry(EntryFactory.Create(obj));
+        s_ComponentListService?.RecordEntry(EntryFactory.Create(obj));
       }
 
       // Recursively check children

@@ -35,13 +35,24 @@ namespace Odezzshuuk.Editor.SelectionTracker {
       }
 
       _historyService = GetService<HistoryService>();
-      _mostVisitedService = GetService<MostVisitedService>();
-      _favoritesService = GetService<FavoritesService>();
-      _sceneComponentsService = GetService<SceneComponentsService>();
+      _historyService.OnUpdated.RemoveListener(OnServiceUpdate);
+      _historyService.OnUpdated.AddListener(OnServiceUpdate);
 
-      foreach (IEntryService entryService in _entryServices) {
-        entryService?.OnUpdated.AddListener(OnServiceUpdate);
-      }
+      _mostVisitedService = GetService<MostVisitedService>();
+      _mostVisitedService.OnUpdated.RemoveListener(OnServiceUpdate);
+      _mostVisitedService.OnUpdated.AddListener(OnServiceUpdate);
+
+      _favoritesService = GetService<FavoritesService>();
+      _favoritesService.OnUpdated.RemoveListener(OnServiceUpdate);
+      _favoritesService.OnUpdated.AddListener(OnServiceUpdate);
+
+      _sceneComponentsService = GetService<SceneComponentsService>();
+      _sceneComponentsService.OnUpdated.RemoveListener(OnServiceUpdate);
+      _sceneComponentsService.OnUpdated.AddListener(OnServiceUpdate);
+
+      // foreach (IEntryService entryService in _entryServices) {
+      //   entryService?.OnUpdated.AddListener(OnServiceUpdate);
+      // }
     }
 
     /// <summary>
@@ -57,7 +68,7 @@ namespace Odezzshuuk.Editor.SelectionTracker {
       }
       T newService = new();
       _entryServices.Add(newService);
-      Save(true);
+      Save();
       return newService;
     }
 
@@ -142,7 +153,7 @@ namespace Odezzshuuk.Editor.SelectionTracker {
     /// Automatically saves the persistence data to disk to maintain data consistency.
     /// </summary>
     private void OnServiceUpdate() {
-      Save(true);
+      Save();
     }
   }
 }

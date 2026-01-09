@@ -1,6 +1,7 @@
 using System.Linq;
 using System.Collections.Generic;
 using UnityEditor;
+using UnityEngine;
 using UnityEditor.UIElements;
 using UnityEngine.UIElements;
 
@@ -20,6 +21,7 @@ namespace Odezzshuuk.Editor.SelectionTracker {
     public void OnEnable() {
       PreferencePersistence.instance.onUpdated += PreferencesUpdatedCallback;
       _entryService = EntryServicePersistence.instance.GetService<T>();
+      _entryService?.OnUpdated.RemoveListener(EntryServiceUpdatedCallback);
       _entryService?.OnUpdated.AddListener(EntryServiceUpdatedCallback);
     }
 
