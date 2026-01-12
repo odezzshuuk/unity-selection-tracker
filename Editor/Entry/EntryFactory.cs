@@ -9,15 +9,16 @@ namespace Odezzshuuk.Editor.SelectionTracker {
       GlobalObjectId id = GlobalObjectId.GetGlobalObjectIdSlow(obj);
       if (obj is GameObject go) {
 
-        // prefab instance is treated as gameobject
-        if (id.identifierType == 2) {
-          return new GameObjectEntry(go, id);
-        }
-
+        // check prefab gameobject first 
         // prefab content is gameobject in prefab edit mode
         PrefabStage prefabStage = PrefabStageUtility.GetCurrentPrefabStage();
         if (prefabStage != null) {
           return new PrefabContentEntry(go, id, prefabStage);
+        }
+
+        // prefab instance is treated as gameobject
+        if (id.identifierType == 2) {
+          return new GameObjectEntry(go, id);
         }
 
         if (Application.isPlaying) {

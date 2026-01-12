@@ -60,17 +60,10 @@ namespace Odezzshuuk.Editor.SelectionTracker {
 
     public override void Open() {
 
-      if (RefState.HasFlag(RefState.Loaded)) {
-        if (EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo()) {
-          PrefabStageUtility.OpenPrefab(_cachedPrefabAssetPath);
-          Selection.activeObject = Ref;
-          return;
-        }
-      }
-
       if (RefState.HasFlag(RefState.Unloaded)) {
         if (EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo()) {
           PrefabStageUtility.OpenPrefab(_cachedPrefabAssetPath);
+          TryRestoreAndCache();
           Selection.activeObject = Ref;
           return;
         }

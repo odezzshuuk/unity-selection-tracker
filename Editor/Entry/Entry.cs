@@ -14,7 +14,7 @@ namespace Odezzshuuk.Editor.SelectionTracker {
     Prefab = 1 << 2,
 
     // GameObject State
-    Loaded = (1 << 4) | GameObject,
+    Loaded = (1 << 4) | GameObject,  // in current scene
     Unloaded = (1 << 5) | GameObject,
     Destroyed = (1 << 6) | GameObject,
     Playing = (1 << 7) | GameObject,
@@ -23,7 +23,7 @@ namespace Odezzshuuk.Editor.SelectionTracker {
     Deleted = 1 << 8,
 
     // Prefab Content State
-    Staged = Loaded | Prefab,
+    Staged = Loaded | Prefab,  // in current prefab stage
     Unstaged = Unloaded | Prefab,
 
     Unknown = 0,

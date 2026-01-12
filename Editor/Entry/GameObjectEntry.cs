@@ -71,15 +71,6 @@ namespace Odezzshuuk.Editor.SelectionTracker {
 
     public override void Open() {
 
-      if (RefState.HasFlag(RefState.Loaded)) {
-        if (EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo()) {
-          EditorSceneManager.OpenScene(_cachedScenePath);
-          TryRestoreAndCache();
-          Selection.activeObject = Ref;
-          return;
-        }
-      }
-
       if (RefState.HasFlag(RefState.Unloaded)) {
         if (EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo()) {
           EditorSceneManager.OpenScene(_cachedScenePath);
@@ -88,7 +79,9 @@ namespace Odezzshuuk.Editor.SelectionTracker {
           return;
         }
       }
+
       if (RefState.HasFlag(RefState.Loaded)) {
+        StageUtility.GoToMainStage();  // Ensure focus on scene
         Ping();
       }
     }
@@ -105,7 +98,7 @@ namespace Odezzshuuk.Editor.SelectionTracker {
 
     protected bool TryRestoreFromId(out GameObject go) {
 
-      // In play mode, do not try to restore GameObject instance by globalObjectId 
+      // In play mode, do not try to restore GameObject instance by globalObjectId
       // Same globalObjectId but different instance in play mode and edit mode
       // When GameObject in playing mode is Selected, just update the entry ref
       if (Application.isPlaying) {
